@@ -14,6 +14,14 @@ This web application allows users to explore the habitat use of birds in the Low
 
 * Identifying and describing potential risks to birds and conservation measures to avoid, minimize, and mitigate impacts from energy infrastructure development in the Cook Inlet Planning Area, Alaska.
 
+## Usage
+
+**Data management.R** includes workflows for generating the data objects in the *Processed data objects* folder.
+
+The *www* folder contains various *README.Rmd* files. 
+
+**app.R** includes the source code for a web application that allows users to explore the habitat use of birds in the Lower Cook Inlet, Alaska.
+
 ## Getting help
 
 Please contact the [Alaska Migratory Birds Office](https://www.fws.gov/office/alaska-migratory-birds/contact-us) with any questions. Key project personnel, include:
