@@ -16,7 +16,7 @@ This web application allows users to explore the habitat use of birds in the Low
 
 ## Usage
 
-**Data management.R** includes workflows for generating the data objects in the *Processed data objects* folder.
+**Data management.R** includes workflows for generating the data objects in the **Processed data objects** folder.
 
 The **www** folder contains various **README.Rmd** files. 
 
