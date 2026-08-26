@@ -1,0 +1,72 @@
+---
+title: "Migratory Birds in the CIPA, Alaska: Tracking data user guide"
+author: "Ben Lagasse, U.S. Fish & Wildlife Service, Division of Migratory Bird Management
+  (Alaska Region)"
+output: html_document
+---
+
+# Cook Inlet Planning Area, Migratory Bird Explorer
+
+This web application allows users to explore the habitat use of birds in the Lower Cook Inlet across the annual cycle, and improves our understanding of disturbance risks associated with potential energy infrastructure and associated vessels. It may also inform oil spill risk assessments and response. The specific objectives of this web application for the Cook Inlet Planning Area, Alaska, include:
+
+* Developing a comprehensive geospatial database for storing, managing, and analyzing avian spatial data and associated data resources.
+
+* Describing spatial and temporal patterns of bird use across the annual cycle including breeding, migratory, and wintering periods.
+
+* Facilitating access to priority information including abundance, distribution, key sites, and migratory movements.
+
+* Identifying and describing potential risks to birds and conservation measures to avoid, minimize, and mitigate impacts from energy infrastructure development in the Cook Inlet Planning Area, Alaska.
+
+
+## Use areas tab
+
+The use areas tab allows user to visualize and subset available tracking data by species, month, individual, and year. Upon selecting a species all available months, individuals, and years will automatically be selected. To subset by month, individual, or year select the corresponding **dropdown menu** and select/deselect the available options. After making selections, click the **Update map** button to visualize the selected data. Upon modifying the species, months, individuals, or years click the **Update map** button to visualize the newly selected data.
+
+Track locations are colored by individual, and **clicking on a track location** reveals the track line of the corresponding individual in the corresponding year. **Clicking on a track location** also reveals the species, tag ID, and day of year. To modify the basemap upon which locations are mapped, click the **basemap icon** in the top right corner of the map.
+
+To visualize a kernel density estimate (i.e., the core use areas) of the selected data, select the "entire analysis area" or "offshore area" **radio button** below **Update map**. If the **radio buttons** are unavailable, first click **Update map**.
+
+To visualize the degree of overlap between the selected tracking data and the Cook Inlet Planning and Lease Sale areas, select the corresponding **radio button** under "spatial domains."
+
+##### **Description of options and outputs**
+- **Species:** The species of interest.
+- **Months:** The period of interest.
+- **Individuals:** The individuals of interest.
+- **Years:** The years of interest.
+- **Kernel density estimate (KDE):**
+  - "Entire analysis area" includes offshore and terrestrial areas in and around the Cook Inlet, Alaska. For the exact delineation of the Cook Inlet analysis area, see "analysis area" under "spatial domains."
+  - "Offshore area" includes the offshore areas in and around the Cook Inlet, Alaska. For the exact delineation of the Cook Inlet analysis area, see "analysis area" under "spatial domains."
+  - Note: KDE's are fitted for each individual (smoothing parameter: reference bandwidth) and then averaged across individuals. For the "offshore area" model, positive values occurring on land are set to 0 and remaining values are corrected to sum to 1.  
+- **Spatial domains:**
+  - Cook Inlet Planning Area: The Cook Inlet Planning Area as defined by the Bureau of Ocean Energy Management.
+  - Lease Sale Area: The Lease Sale Area as defined by the Bureau of Ocean Energy Management.
+  - Analysis area: The offshore and terrestrial areas in and around the Cook Inlet, Alaska.
+- **Attributes of the KDE:**
+  - Species: The species of interest.
+  - Total individuals: The number of individuals with locations in the analysis area.
+  - Total locations: Total locations in the analysis area.
+  - Locations per individual: The distribution of locations per individual, in the analysis area.
+  - Years with locations in the Cook Inlet: Years with locations in the analysis area.
+
+## Migratory timing tab 
+
+The migratory timing tab allows users to explore the temporal components of the available tracking data with respect to species' use of the Cook Inlet, Alaska. We also present eBird data from the Cook Inlet, Alaska, to supplement the available tracking data and provide a more detailed examination of species' use of the Cook Inlet. Note: For the exact delineation of the Cook Inlet analysis area, see "analysis area" under "spatial domains" in the use areas tab.
+
+##### **Description of options and outputs**
+- **Species:** The species of interest.
+- **Info table:**
+  - Species: The species of interest.
+  - Individuals with locations in the Cook Inlet: The proportion of tracked individuals, of the selected species, with locations in the analysis area.
+  - Minimum length of stay: The distribution of minimum length of stay, per visit, in the analysis area.
+  - Years with locations in the Cook Inlet: Years with locations in the analysis area.
+- **First / Last location in the Cook Inlet:** The date of individuals' first / last location, per visit, in the analysis area.
+- **Minimum length of stay:** The minimum number of days individuals' spent, per visit, in the analysis area.
+- **Tracking data in the Cook Inlet:** The percent of tracks, per week of year, with locations in the analysis area.
+- **Total available tracks:** The total number of tracks, per week of year. Note: A *track* represents the migratory path of an individual in a given year. For example, if an individual was tracked for 4 consecutive years, that individual would contribute 4 *tracks* to the data.
+- **eBird data in the Cook Inlet:** The percent of complete eBird checklists submitted in the analysis area, per week of year, that report the selected species.
+- **Total checklists in the CI:** The total number of complete eBird checklists submitted in the analysis area, per week of year.
+
+## References tab 
+
+The references tab details the origins of the tracking data presented here, organized by species.
+

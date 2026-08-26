@@ -1,0 +1,22 @@
+---
+title: 'Migratory Birds in the CIPA, Alaska: Contact us'
+author: Ben Lagasse, U.S. Fish & Wildlife Service, Division of Migratory Bird Management
+  (Alaska Region)
+output:
+  html_document: default
+  pdf_document: default
+---
+
+# Contact us
+
+This web application was developed by the U.S. Fish & Wildlife Service, Division of Migratory Bird Management (Alaska Region), to serve as a central repository for avian data and analytical results relevant to the Lower Cook Inlet, Alaska. Please contact the [Alaska Migratory Birds Office](https://www.fws.gov/office/alaska-migratory-birds/contact-us) with any questions. Key project personnel, include:
+
+**Jim Johnson**\
+Wildlife Biologist - Alaska Landbird Coordinator
+
+**Amy Pocewicz**\
+Deputy Assistant Regional Director - Migratory Birds Management
+
+**Zak Pohlen**\
+Wildlife Biologist - Landbirds
+

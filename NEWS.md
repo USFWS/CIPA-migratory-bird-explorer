@@ -12,26 +12,15 @@ All notable changes to this project will be documented in this file. The format 
 >-   *Mention whether you follow Semantic Versioning.*
 -->
 
-# your-repository-name 0.1.0
+# CIPA-migratory-bird-explorer v0.1.0
 
-General notes about this version can go here.
+Initial implementation of the "tracking data" component of the web app.
 
 ## Added
 
--   A list of new features
+- Ability to subset and examine tracking data, including:
+  - Migratory routes and local movements
+  - Kernel density estimates of core use areas in the Cook Inlet, Alaska
+  - Migratory timing in the Cook Inlet, Alaska
 
-## Changed
 
--   A list of changes to the existing functionality
-
-## Deprecated
-
--   A list of soon-to-be removed features
-
-## Removed
-
--   A list of now removed features
-
-## Fixed
-
--   A list of bugs that were fixed

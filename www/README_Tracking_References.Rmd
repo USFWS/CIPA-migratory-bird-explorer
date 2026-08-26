@@ -1,0 +1,71 @@
+---
+title: "Migratory Birds in the CIPA, Alaska: Tracking data user guide"
+author: "Ben Lagasse, U.S. Fish & Wildlife Service, Division of Migratory Bird Management
+  (Alaska Region)"
+output: html_document
+---
+
+# References
+**Brant**
+- Boyd, WS. Movebank study name: "Brant Geese Sean Boyd 2002". https://www.movebank.org/cms/webapp?gwt_fragment=page=studies,path=study1495582
+- Boyd, WS. Movebank study name: "Brant Geese Sean Boyd 2005". https://www.movebank.org/cms/webapp?gwt_fragment=page=studies,path=study1518377
+- Boyd, WS, Ward, DH, Kraege, DK, Gerick, AA. (2013). Migration patterns of Western High Arctic (Grey-belly) Brant *Branta bernicla*. *Wildfowl* 3:3-25. https://tidsskrift.dk/Wildfowl/article/view/153616
+
+**Tundra Swan**
+- Ely, CR, Terenzi, J, Tibbitts, TL, and Douglas, DC. (2020). Tracking data for Tundra Swans (*Cygnus columbianus*) (ver 1.0, January 2020): U.S. Geological Survey data release. https://doi.org/10.5066/P9KBR79C
+
+**King Eider**
+- Powell, AN, Oppel, S, and McGuire, R. (2024). Data from: Study "King Eider Alaska (UAF / USGS)". Movebank Data Repository. https://doi.org/10.5441/001/1.339
+
+**Black Scoter**
+- Flint, PL, Schamber, JL, and Douglas, DC. (2020). Tracking data for Black Scoters (*Melanitta americana*) (ver 1.0, March 2020): U.S. Geological Survey data release. https://doi.org/10.5066/P93EF3TH
+
+**Long-tailed Duck**
+- Petersen, MR, Flint, PL, Grand, JB, Mulcahy, DM, and Douglas, DC. (2022). Tracking data for Long-tailed Ducks (*Clangula hyemalis*) (ver 1.0, April 2022): U.S. Geological Survey data release. https://doi.org/10.5066/P95B6K20
+
+**Common Merganser**
+- Petersen, MR, and Douglas, DC. (2016). Data from: Post-fledging movements of juvenile common mergansers (*Mergus merganser*) in Alaska as inferred by satellite telemetry. Movebank Data Repository. https://doi.org/10.5441/001/1.3gc013f3
+
+**Hudsonian Whimbrel**
+- Tibbitts, TL, Ruthrauff, DR, Gill, RE Jr, and Douglas, DC. (2021). Tracking data for Whimbrel (*Numenius phaeopus*) (ver 2.0, May 2021): U.S. Geological Survey data release. https://doi.org/10.5066/P978PX2X
+
+**Marbled Godwit**
+- Ruthrauff, DR, Tibbitts, TL, Gill, RE Jr, and Douglas, DC. (2019). Tracking data for Marbled Godwit (*Limosa fedoa*): U.S. Geological Survey data release. https://doi.org/10.5066/P9NORY48
+
+**Tufted Puffin**
+- Hatch, SA, Meyers, PM, Mulcahy, DM, and Douglas, DC. (2020). Tracking data for Tufted Puffins (*Fratercula cirrhata*) (ver 1.0, October 2020): U.S. Geological Survey data release. https://doi.org/10.5066/P9L9EIUI
+
+**Kittlitz's Murrelet**
+- Piatt, JF, Kissling, ML, Arimitsu, ML, and Douglas, DC. (2021). Tracking data for Kittlitz's Murrelets (*Brachyramphus brevirostris*) (ver 1.0, June 2021): U.S. Geological Survey data release. https://doi.org/10.5066/P9MMVP9I
+
+**Marbled Murrelet**
+- Bertram, DF, Janssen, MH, Cragg, JL, Macdonald, CA, McAdie, M, Wilson, A, Woo, K, Gross, E, Maftei, M, O'Hara, PD, Davis, SE, Greene, R, and Vincent, P. (2022). Data from: Study "Marbled Murrelet satellite tracking data from British Columbia, Canada 2014-2016". Movebank Data Repository. https://doi.org/10.5441/001/1.j0d889f0
+
+**Common Murre**
+- Hatch, SA, Meyers, PM, Mulcahy, DM, and Douglas, DC. (2020). Tracking data for Common Murres (*Uria aalge*) (ver 1.0, August 2020): U.S. Geological Survey data release. https://doi.org/10.5066/P9SOW6V2
+
+**American Herring Gull, Glaucous-winged Gull, & Cook Inlet Gull**
+- Ramey, AM, Ahlstrom, CA, van Toor, ML, Woksepp, H, Chandler, JC, Reed, JA, Reeves, AB, Waldenström, J, Franklin, AB, Bonnedahl, J, and Douglas, DC. (2020). Tracking data for three large-bodied gull species and hybrids (Larus spp.) (ver 1.0, June 2020): U.S. Geological Survey data release. https://doi.org/10.5066/P9FZ4OJW
+
+**Iceland Gull**
+- Davis, SE, and Hipfner, JM. (2019). Movebank study name: "Thayer's Gulls from the Canadian High Arctic". https://www.movebank.org/cms/webapp?gwt_fragment=page=studies,path=study176466071
+
+**Red-throated Loon**
+- Uher-Koch, BD, Schmutz, JA, and Douglas, DC. (2020). Tracking data for Red-throated Loons (*Gavia stellata*): U.S. Geological Survey data release, version 2.0. https://doi.org/10.5066/F7TH8KVH
+
+**Yellow-billed Loon**
+- Schmutz, JA, Uher-Koch, BD, and Douglas, DC. (2019). Tracking data for Yellow-billed Loons (*Gavia adamsii*) (ver 1.0, November 2019): U.S. Geological Survey data release. https://doi.org/10.5066/P9UKHJ22
+
+**Northern Fulmar**
+- Hatch, SA, Gill, VA, Mulcahy, DM, and Douglas, DC. (2020). Tracking data for Northern Fulmars (*Fulmarus glacialis*) (ver 1.0, October 2020): U.S. Geological Survey data release. https://doi.org/10.5066/P992BR5E
+
+**American Robin**
+- Boelman, N. Movebank study name: "ABoVE: Boelman Alberta American Robins". https://www.movebank.org/cms/webapp?gwt_fragment=page=studies,path=study136953438
+- Oliver, RY, Mahoney, PJ, Gurarie, E, Krikun, N, Weeks, BC, Hebblewhite, M, Liston, G, and Boelman, N. (2020). Behavioral responses to spring snow conditions contribute to long-term shift in migration phenology in American Robins. Environmental Research Letters. 15(4):045003. https://doi.org/10.1088/1748-9326/ab71a0
+
+**Rusty Blackbird**
+- Migratory Connectivity Project. Movebank study name: "MCP Rusty Blackbird Alberta, Alaska & New Hampshire". https://www.movebank.org/cms/webapp?gwt_fragment=page=studies,path=study613825248
+- Wright, JR, Johnson, JA, Bayne, E, Powell, LL, Foss, CR, Kennedy, JC, and Marra, PP. (2021). Migratory connectivity and annual cycle phenology of Rusty Blackbirds (*Euphagus carolinus*) revealed through archival GPS tags. Avian Conservation and Ecology 16(1):20. https://doi.org/10.5751/ACE-01871-160120
+
+**eBird Basic Dataset**
+- eBird Basic Dataset. Version: EBD_relJul-2026. Cornell Lab of Ornithology, Ithaca, New York. Jul 2026. https://science.ebird.org/en/use-ebird-data
