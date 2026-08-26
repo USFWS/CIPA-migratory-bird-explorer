@@ -6,7 +6,7 @@
 
 <!-- badges: end -->
 
-# R7 (Alaska) GitHub Repository Template
+# Cook Inlet Planning Area, Migratory Bird Data Explorer
 
 ## Overview
 
