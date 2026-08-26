@@ -18,7 +18,7 @@ This web application allows users to explore the habitat use of birds in the Low
 
 **Data management.R** includes workflows for generating the data objects in the *Processed data objects* folder.
 
-The *www* folder contains various *README.Rmd* files. 
+The **www** folder contains various **README.Rmd** files. 
 
 **app.R** includes the source code for a web application that allows users to explore the habitat use of birds in the Lower Cook Inlet, Alaska.
 
