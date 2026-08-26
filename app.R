@@ -406,15 +406,13 @@ server <- function(input, output, session){
                                                                 radius = 10,
                                                                 fillOpacity = 1,
                                                                 popup = Sel_birds_fin()$location.label,
-                                                                layerId = "LCI_pnts") %>%
-                                                    setView(lng = 207.40, lat = 58.00, zoom = 6)}
+                                                                layerId = "LCI_pnts")}
                                                 else {
                                                   leafletProxy("UD_map") %>%
                                                     clearGlLayers() %>% # remove points
                                                     clearShapes() %>% # remove polygons
                                                     clearControls() %>% # remove legend
-                                                    clearImages() %>% # remove UD
-                                                    setView(lng = 207.40, lat = 58.00, zoom = 6)} 
+                                                    clearImages()} 
   })
   ###
   observeEvent(input$Species, { ### update "Individuals" and "Years" by species selection
