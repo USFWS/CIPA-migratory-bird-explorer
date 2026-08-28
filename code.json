@@ -1,8 +1,8 @@
 [
   {
-    "name": "r7-repo-template",
+    "name": "CIPA-migratory-bird-explorer",
     "organization": "U.S. Fish & Wildlife Service",
-    "description": "R7 GitHub Repository Template",
+    "description": "Cook Inlet Planning Area, Migratory Bird Explorer",
     "version": "0.1.0",
     "status": "Development",
 
@@ -11,15 +11,15 @@
       "licenses": [
         {
           "name": "Public Domain, CC0-1.0",
-          "URL": "https://github.com/USFWS/r7-repo-template/blob/main/LICENSE.md"
+          "URL": "https://github.com/USFWS/CIPA-migratory-bird-explorer/blob/main/LICENSE.md"
         }
       ]
     },
 
-    "homepageURL": "https://github.com/USFWS/r7-repo-template",
-    "downloadURL": "https://github.com/USFWS/r7-repo-template/archive/refs/heads/main.zip",
-    "disclaimerURL": "https://github.com/USFWS/r7-repo-template/blob/main/DISCLAIMER.md",
-    "repositoryURL": "https://github.com/USFWS/r7-repo-template.git",
+    "homepageURL": "https://github.com/USFWS/CIPA-migratory-bird-explorer",
+    "downloadURL": "https://github.com/USFWS/CIPA-migratory-bird-explorer/archive/refs/heads/main.zip",
+    "disclaimerURL": "https://github.com/USFWS/CIPA-migratory-bird-explorer/blob/main/DISCLAIMER.md",
+    "repositoryURL": "https://github.com/USFWS/CIPA-migratory-bird-explorer",
     "vcs": "git",
 
     "laborHours": 4,
@@ -36,12 +36,12 @@
     ],
 
     "contact": {
-      "name": "Your first and last name",
-      "email": "firstname_lastname@fws.gov"
+      "name": "Benjamin Lagasse",
+      "email": "benjamin_lagasse@fws.gov"
     },
 
     "date": {
-      "metadataLastUpdated": "2023-05-17"
+      "metadataLastUpdated": "2026-08-28"
     }
   }
 ]
