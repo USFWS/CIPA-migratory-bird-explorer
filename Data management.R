@@ -32,7 +32,7 @@ for (i in 1:length(files)){
   list_df[[paste0("",files[i],"")]][["file.name"]] <- files[i] # incl col:file name w/in each data set
   sp <- c(sp, # vector of species names
           unique(list_df[[paste0("",files[i],"")]][["individual.taxon.canonical.name"]]))}
-list_sp <- setNames(vector("list", length(unique(sp))), c(unique(sp))) # empty list of species names
+list_tracks <- setNames(vector("list", length(unique(sp))), c(unique(sp))) # empty list of species names
 df.comp.og <- data.frame(event.id = NA,
                          timestamp = NA,
                          location.long = NA,
@@ -45,9 +45,9 @@ df.comp.og <- data.frame(event.id = NA,
                          study.name = NA,
                          file.name = NA)
 df.comp <- df.comp.og
-for (i in 1:length(list_sp)){ # populate list of species names
+for (i in 1:length(list_tracks)){ # populate list of species names
   for (j in 1:length(list_df)){ # search for species across files and stitch the data sets together
-    if (names(list_sp)[i] %in% unique(list_df[[j]][["individual.taxon.canonical.name"]])){
+    if (names(list_tracks)[i] %in% unique(list_df[[j]][["individual.taxon.canonical.name"]])){
       df <- list_df[[j]]
       df2 <- data.frame(if (is.null(df$event.id)){event.id = NA} else {event.id = df$event.id},
                         timestamp = df$timestamp,
@@ -61,60 +61,85 @@ for (i in 1:length(list_sp)){ # populate list of species names
                         study.name = df$study.name,
                         file.name = df$file.name)
       names(df2)[c(1,5,6,8,9)] <- c("event.id","argos.lc","sensor.type","tag.local.identifier","individual.local.identifier") 
-      df3 <- df2[df2$individual.taxon.canonical.name==names(list_sp)[i] & # this accounts for some files including multiple taxa
+      df3 <- df2[df2$individual.taxon.canonical.name==names(list_tracks)[i] & # this accounts for some files including multiple taxa
                    is.na(df2$location.long)==F,]
       df.comp <- rbind(df.comp,df3)}
   }
-  list_sp[[names(list_sp)[i]]] <- df.comp[-1,] # move df.comp into list
+  list_tracks[[names(list_tracks)[i]]] <- df.comp[-1,] # move df.comp into list
   df.comp <- df.comp.og # reset df.comp
 }
 
 ####
-names(list_sp) <- c("American Robin", "Black Scoter", "Brant",
+for (i in 1:length(list_tracks)) {
+  df <- list_tracks[[i]]
+  df <- df[df$argos.lc== "" |
+             df$argos.lc== "1" |
+             df$argos.lc== "2" |
+             df$argos.lc== "3" |
+             df$argos.lc== "G",] %>%
+    drop_na(timestamp)
+  for (j in 1:dim(df)[1]){
+    if (df$argos.lc[j]==""){
+      df$argos.lc[j] <- df$sensor.type[j]}
+  }
+  df <- df[df$argos.lc== "gps" |
+             df$argos.lc== "1" |
+             df$argos.lc== "2" |
+             df$argos.lc== "3" |
+             df$argos.lc== "G",] %>%
+    drop_na(timestamp)
+  list_tracks[[i]] <- df
+}
+
+####
+names(list_tracks) <- c("Black Scoter", "Brant",
                     "Common Merganser","Common Murre","Cook Inlet Gull",
                     "Glaucous-winged Gull","Glaucous Gull","American Herring Gull",
                     "King Eider","Kittlitz's Murrelet","Long-tailed Duck",
                     "Marbled Godwit","Marbled Murrelet","Northern Fulmar",
-                    "Red-throated Loon","Rusty Blackbird","Iceland Gull",
+                    "Red-throated Loon","Iceland Gull",
                     "Tufted Puffin","Tundra Swan","Hudsonian Whimbrel",
                     "Yellow-billed Loon")
-for (i in 1:length(names(list_sp))){
-  list_sp[[i]]$event.id <- as.character(list_sp[[i]]$event.id)
-  list_sp[[i]]$timestamp <- as.character(list_sp[[i]]$timestamp)
-  list_sp[[i]]$location.long <- as.numeric(list_sp[[i]]$location.long)
-  list_sp[[i]]$location.lat <- as.numeric(list_sp[[i]]$location.lat)
-  list_sp[[i]]$argos.lc <- as.character(list_sp[[i]]$argos.lc)
-  list_sp[[i]]$sensor.type <- as.character(list_sp[[i]]$sensor.type)
-  list_sp[[i]]$individual.taxon.canonical.name <- as.character(list_sp[[i]]$individual.taxon.canonical.name)
-  list_sp[[i]]$tag.local.identifier <- as.character(list_sp[[i]]$tag.local.identifier)
-  list_sp[[i]]$individual.local.identifier <- as.character(list_sp[[i]]$individual.local.identifier)
-  list_sp[[i]]$study.name <- as.character(list_sp[[i]]$study.name)
-  list_sp[[i]]$file.name <- as.character(list_sp[[i]]$file.name)
+for (i in 1:length(names(list_tracks))){
+  list_tracks[[i]]$event.id <- as.character(list_tracks[[i]]$event.id)
+  list_tracks[[i]]$timestamp <- as.character(list_tracks[[i]]$timestamp)
+  list_tracks[[i]]$location.long <- as.numeric(list_tracks[[i]]$location.long)
+  list_tracks[[i]]$location.lat <- as.numeric(list_tracks[[i]]$location.lat)
+  list_tracks[[i]]$argos.lc <- as.character(list_tracks[[i]]$argos.lc)
+  list_tracks[[i]]$sensor.type <- as.character(list_tracks[[i]]$sensor.type)
+  list_tracks[[i]]$individual.taxon.canonical.name <- as.character(list_tracks[[i]]$individual.taxon.canonical.name)
+  list_tracks[[i]]$tag.local.identifier <- as.character(list_tracks[[i]]$tag.local.identifier)
+  list_tracks[[i]]$individual.local.identifier <- as.character(list_tracks[[i]]$individual.local.identifier)
+  list_tracks[[i]]$study.name <- as.character(list_tracks[[i]]$study.name)
+  list_tracks[[i]]$file.name <- as.character(list_tracks[[i]]$file.name)
   #
-  list_sp[[i]]$Species <- names(list_sp)[i]
-  list_sp[[i]]$Year <- format(as.Date(list_sp[[i]]$timestamp), "%Y")
-  list_sp[[i]]$Month <- format(as.Date(list_sp[[i]]$timestamp), "%B")
-  list_sp[[i]]$Time_continuous <- format(as.Date(list_sp[[i]]$timestamp), "%j")
-  list_sp[[i]]$Time_continuous <- as.numeric(list_sp[[i]]$Time_continuous)
-  list_sp[[i]]$Timestamp2 <- format(as.Date(list_sp[[i]]$timestamp), "%d %b %Y")
-  list_sp[[i]]$location.long.dateline <- NA
-  list_sp[[i]]$location.lat.dateline <- list_sp[[i]]$location.lat
-  list_sp[[i]]$location.label <- NA
-  list_sp[[i]]$Tag.pal <- NA
-  for (j in 1:dim(list_sp[[i]])[1]){
-    if (list_sp[[i]]$location.long[j] < 0){
-      list_sp[[i]]$location.long.dateline[j] <- list_sp[[i]]$location.long[j]+360}
-    else {list_sp[[i]]$location.long.dateline[j] <- list_sp[[i]]$location.long[j]}
-    list_sp[[i]]$individual.id[j] <- paste(names(list_sp[i]),
-                                           list_sp[[i]]$tag.local.identifier[j],
-                                           list_sp[[i]]$individual.local.identifier[j],sep=".")
-    list_sp[[i]]$location.label[j] <- paste(list_sp[[i]]$Species[j],
-                                            paste0(" (Tag: ","",list_sp[[i]]$tag.local.identifier[j],"); "),
-                                            list_sp[[i]]$Timestamp2[j], sep="")
+  list_tracks[[i]]$Species <- names(list_tracks)[i]
+  list_tracks[[i]]$Year <- format(as.Date(list_tracks[[i]]$timestamp), "%Y")
+  list_tracks[[i]]$Month <- format(as.Date(list_tracks[[i]]$timestamp), "%B")
+  list_tracks[[i]]$Time_continuous <- format(as.Date(list_tracks[[i]]$timestamp), "%j")
+  list_tracks[[i]]$Time_continuous <- as.numeric(list_tracks[[i]]$Time_continuous)
+  list_tracks[[i]]$Timestamp2 <- format(as.Date(list_tracks[[i]]$timestamp), "%d %b %Y")
+  list_tracks[[i]]$location.long.dateline <- NA
+  list_tracks[[i]]$location.lat.dateline <- list_tracks[[i]]$location.lat
+  list_tracks[[i]]$location.label <- NA
+  list_tracks[[i]]$Tag.pal <- NA
+  for (j in 1:dim(list_tracks[[i]])[1]){
+    if (list_tracks[[i]]$location.long[j] < 0){
+      list_tracks[[i]]$location.long.dateline[j] <- list_tracks[[i]]$location.long[j]+360}
+    else {list_tracks[[i]]$location.long.dateline[j] <- list_tracks[[i]]$location.long[j]}
+    list_tracks[[i]]$individual.id[j] <- paste(names(list_tracks[i]),
+                                           list_tracks[[i]]$tag.local.identifier[j],
+                                           list_tracks[[i]]$individual.local.identifier[j],sep=".")
+    list_tracks[[i]]$location.label[j] <- paste(list_tracks[[i]]$Species[j],
+                                            paste0(" (Tag: ","",list_tracks[[i]]$tag.local.identifier[j],"); "),
+                                            list_tracks[[i]]$Timestamp2[j], sep="")
     }
 }
 
-list_sp <- list_sp[c("Brant","Tundra Swan","King Eider", # reorder
+
+
+####
+list_tracks <- list_tracks[c("Brant","Tundra Swan","King Eider", # reorder
                      "Black Scoter","Long-tailed Duck",
                      "Common Merganser","Hudsonian Whimbrel",
                      "Marbled Godwit","Tufted Puffin",
@@ -122,13 +147,10 @@ list_sp <- list_sp[c("Brant","Tundra Swan","King Eider", # reorder
                      "Common Murre","American Herring Gull", "Glaucous Gull",
                      "Glaucous-winged Gull","Cook Inlet Gull",
                      "Iceland Gull","Red-throated Loon",
-                     "Yellow-billed Loon","Northern Fulmar",
-                     "American Robin","Rusty Blackbird")]
+                     "Yellow-billed Loon","Northern Fulmar")]
 
-list_sp["Glaucous Gull"] <- NULL # remove Glaucous Gull
-
-list.tracks <- list_sp
-#save(list.tracks, file="Processed data objects/list.tracks.rda")
+list_tracks["Glaucous Gull"] <- NULL # remove Glaucous Gull
+#save(list_tracks, file="Processed data objects/list_tracks.rda")
 
 # de-list and save as .fst files
 names <- c("a_Brant","b_Tundra Swan","c_King Eider", # reorder
@@ -139,10 +161,9 @@ names <- c("a_Brant","b_Tundra Swan","c_King Eider", # reorder
            "l_Common Murre","m_American Herring Gull",
            "n_Glaucous-winged Gull","o_Cook Inlet Gull",
            "p_Iceland Gull","q_Red-throated Loon",
-           "r_Yellow-billed Loon","s_Northern Fulmar",
-           "t_American Robin","u_Rusty Blackbird")
-# for (i in 1:length(list.tracks)){
-#   df <- list.tracks[[i]]
+           "r_Yellow-billed Loon","s_Northern Fulmar")
+# for (i in 1:length(list_tracks)){
+#   df <- list_tracks[[i]]
 #   write.fst(df, paste("Processed data objects/fast.tracks/",paste0("",names[i],""),".fst",sep=""))
 # }
 
@@ -274,7 +295,7 @@ list.rst[[2]] <- spdf.area.GCI.off
 ##
 #
 
-# upload list.tracks and list.shp
+# upload list_tracks and list.shp
 
 
 ####
@@ -374,10 +395,10 @@ df.comp.plot.og <- data.frame(Dates = c("1–7 Jan","8–14 Jan","15–21 Jan","
                               Det.ebird.lists = NA,
                               Perc.ebird = NA)
 ###
-taxa <- names(list.tracks)
+taxa <- names(list_tracks)
 for (i in 1:length(taxa)) { # subset by species
   # construct "length of stay" df
-  df <- bind_rows(list.tracks[c(taxa[i])]) %>%
+  df <- bind_rows(list_tracks[c(taxa[i])]) %>%
     mutate(Loc.long.sf = location.long) %>%
     mutate(Loc.lat.sf = location.lat) %>%
     st_as_sf(coords = c("Loc.long.sf", "Loc.lat.sf"), crs = 4326) %>%
@@ -455,7 +476,7 @@ for (i in 1:length(taxa)) { # subset by species
   list.track.plots[[i]] <- x
 }
 
-names(list.track.plots) <- names(list.tracks)
+names(list.track.plots) <- names(list_tracks)
 #save(list.track.plots, file="Processed data objects/list.track.plots.rda")
 
 

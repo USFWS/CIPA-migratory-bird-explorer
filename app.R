@@ -43,8 +43,7 @@ list.tracks <- setNames(vector("list", length(files)), # empty list of file name
                           "Common Murre","American Herring Gull",
                           "Glaucous-winged Gull","Cook Inlet Gull",
                           "Iceland Gull","Red-throated Loon",
-                          "Yellow-billed Loon","Northern Fulmar",
-                          "American Robin","Rusty Blackbird"))
+                          "Yellow-billed Loon","Northern Fulmar"))
 for (i in 1:length(files)){
   list.tracks[[i]] <- read.fst(paste("Processed data objects/fast.tracks/",paste0("",files[i],""),sep=""))} # tracks: dataframe
 load("Processed data objects/list.shp.rda") # Spatial domains: shapefiles
@@ -89,15 +88,17 @@ ui <- page_navbar(
                                         column(4, class = "no-gutter", wellPanel( #gray border
                                           pickerInput(inputId = "Species",
                                                         label = HTML("<b>Species:</b>"),
-                                                        choices = names(list.tracks),
-                                                        selected = character(0),
+                                                        # choices = names(list.tracks),
+                                                        # selected = character(0),
+                                                        choices = c("none selected", names(list.tracks)),
+                                                        selected = "none selected",
                                                         multiple = FALSE, # allow multiple selections
                                                         width = "100%",
                                                         option = pickerOptions(actionsBox = TRUE,
-                                                                               selectedTextFormat = "count >1",
-                                                                               size = 5,
-                                                                               liveSearch = TRUE,
-                                                                               noneSelectedText = "none selected")),
+                                                                              selectedTextFormat = "count >1",
+                                                                              size = 5,
+                                                                              liveSearch = TRUE,
+                                                                              noneSelectedText = "none selected")),
                                             pickerInput(inputId = "Month", 
                                                         label = HTML("<b>Months:</b>"),
                                                         choices = c("January","February","March","April",
@@ -265,7 +266,7 @@ server <- function(input, output, session){
   # Use areas ---------------------------------------------------------------
   ###
   observe( ### toggle on and off action button and UD radio buttons, with feedback
-          if (is.null(input$Species)){disable("update.map")
+          if (input$Species=="none selected"){disable("update.map")
                                       showFeedbackWarning("Species",text="Select a species",color="#595959",icon=NULL)
                                       disable("UD")}
           else {enable("update.map")
@@ -308,77 +309,73 @@ server <- function(input, output, session){
     })
   ###
   list.spat <- reactive({ ### list of ud rasters ###
-                        ###
-                        spdf.POIN <- data.frame(individual.id = as.factor(Sel_birds_fin()$individual.id), # SpatialPointsDF
-                                                location.long = Sel_birds_fin()$location.long,
-                                                location.lat = Sel_birds_fin()$location.lat) %>%
-                          st_as_sf(coords = c("location.long", "location.lat"), crs = 4326) %>%
-                          st_transform(crs = "+proj=laea +lat_0=59.6 +lon_0=-152.6 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs") %>%
-                          st_filter(list.shp[["area.GCI"]]) %>% # subset those in Great CIPA, using equal area projection
-                          mutate(across(where(is.factor), ~ {counts <- table(.) # count each factor level
-                          droplevels(factor(., levels = names(counts[counts >= 5]))) # keep only those with at least 5 locations
-                          })) %>% 
-                          as("Spatial")
-                        ###
-                        # Estimating and averaging
-                        kud <- kernelUD(spdf.POIN, grid = list.rst[["spdf.area.GCI"]], h="href")
-                        
-                        xbar <- rep(0, dim(kud[[1]]@data)[1]) # string of 0's equal to num of pixels
-                        for (i in 1:length(kud)){ # cycle through individuals
-                          for (j in 1:dim(kud[[i]]@data)[1]){ # cycle through pixels
-                            xbar[j] <- xbar[j] + kud[[i]]@data[["ud"]][j] # sum each pixel
-                          }
-                        }
-                        xbar <- xbar / length(kud)
-                        kud[[length(kud)+1]] <- kud[[length(kud)]]
-                        kud[[length(kud)]]@data[["ud"]] <- xbar
-                        ###
-                        # Mapping continuous UD
-                        kud.spdf <- estUDm2spixdf(kud)
-                        kud.map <- rast(kud.spdf[(dim(kud.spdf@data)[2])]) # raster
-                        tot <- sum(kud.map[,,1],na.rm=T) # recalculate to sum to 1
-                        kud.map <- kud.map / tot
-                        #
-                        off.mask <- rast(list.rst[["spdf.area.GCI.off"]]) # offshore mask
-                        off.mask <- crop(off.mask,kud.map)
-                        off.mask <- resample(off.mask, kud.map, method = "near")
-                        kud.off.map <- mask(kud.map, off.mask)
-                        #
-                        kud.map <- project(kud.map,"EPSG:3857") # Reproject for leaflet
-                        kud.off.map <- project(kud.off.map,"EPSG:3857") # Reproject for leaflet
-                        #
-                        # tot <- sum(kud.map[,,1],na.rm=T) # recalculate to sum to 1
-                        # kud.map <- kud.map / tot
-                        # tot <- sum(kud.off.map[,,1],na.rm=T) # recalculate to sum to 1
-                        # kud.off.map <- kud.off.map / tot
-                        ###
-                        # Converting to discrete
-                        thresholds <- rep(NA,4)
-                        counter <- 0
-                        vals <- sort(as.numeric(values(kud.map)), decreasing = TRUE)
-                        for (i in 1:length(vals)){
-                          counter <- counter + vals[i]
-                          if (is.na(thresholds[4]) && counter >= 0.25){
-                            thresholds[4] <- vals[i]}
-                          if (is.na(thresholds[3]) && counter >= 0.50){
-                            thresholds[3] <- vals[i]}
-                          if (is.na(thresholds[2]) && counter >= 0.75){
-                            thresholds[2] <- vals[i]}
-                          if (is.na(thresholds[1]) && counter >= 0.90){
-                            thresholds[1] <- vals[i]}
-                          if (counter >= 0.90) {break}}
-                        kud.map.disc <- classify(kud.map, rcl = matrix(c(-Inf, thresholds[1], NA,
-                                                                         thresholds[4], Inf, 0.25,
-                                                                         thresholds[3], Inf, 0.50,
-                                                                         thresholds[2], Inf, 0.75,
-                                                                         thresholds[1], Inf, 0.90), ncol=3, byrow=TRUE))
-                        kud.off.map.disc <- classify(kud.off.map, rcl = matrix(c(-Inf, thresholds[1], NA,
-                                                                                 thresholds[4], Inf, 0.25,
-                                                                                 thresholds[3], Inf, 0.50,
-                                                                                 thresholds[2], Inf, 0.75,
-                                                                                 thresholds[1], Inf, 0.90), ncol=3, byrow=TRUE))
-                        list(kud.map.disc = kud.map.disc,
-                             kud.off.map.disc = kud.off.map.disc)
+    ###
+    spdf.POIN <- data.frame(individual.id = as.factor(Sel_birds_fin()$individual.id), # SpatialPointsDF
+                            location.long = Sel_birds_fin()$location.long,
+                            location.lat = Sel_birds_fin()$location.lat) %>%
+      st_as_sf(coords = c("location.long", "location.lat"), crs = 4326) %>%
+      st_transform(crs = "+proj=laea +lat_0=59.6 +lon_0=-152.6 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs") %>%
+      st_filter(list.shp[["area.GCI"]]) %>% # subset those in Great CIPA, using equal area projection
+      mutate(across(where(is.factor), ~ {counts <- table(.) # count each factor level
+      droplevels(factor(., levels = names(counts[counts >= 5]))) # keep only those with at least 5 locations
+      })) %>% 
+      as("Spatial")
+    ###
+    # Estimating and averaging
+    kud <- kernelUD(spdf.POIN, grid = list.rst[["spdf.area.GCI"]], h="href")
+    
+    xbar <- rep(0, dim(kud[[1]]@data)[1]) # string of 0's equal to num of pixels
+    for (i in 1:length(kud)){ # cycle through individuals
+      for (j in 1:dim(kud[[i]]@data)[1]){ # cycle through pixels
+        xbar[j] <- xbar[j] + kud[[i]]@data[["ud"]][j] # sum each pixel
+      }
+    }
+    xbar <- xbar / length(kud)
+    kud[[length(kud)+1]] <- kud[[length(kud)]]
+    kud[[length(kud)]]@data[["ud"]] <- xbar
+    ###
+    # Mapping continuous UD
+    kud.spdf <- estUDm2spixdf(kud)
+    kud.map <- rast(kud.spdf[(dim(kud.spdf@data)[2])]) # raster
+    off.mask <- rast(list.rst[["spdf.area.GCI.off"]]) # offshore mask
+    off.mask <- crop(off.mask,kud.map)
+    off.mask <- resample(off.mask, kud.map, method = "near")
+    kud.off.map <- mask(kud.map, off.mask)
+    #
+    kud.map <- project(kud.map,"EPSG:3857") # Reproject for leaflet
+    kud.off.map <- project(kud.off.map,"EPSG:3857") # Reproject for leaflet
+    #
+    tot <- sum(kud.map[,,1],na.rm=T) # recalculate to sum to 1
+    kud.map <- kud.map / tot
+    kud.off.map <- kud.off.map / tot
+    ###
+    # Converting to discrete
+    thresholds <- rep(NA,4)
+    counter <- 0
+    vals <- sort(as.numeric(values(kud.map)), decreasing = TRUE)
+    for (i in 1:length(vals)){
+      counter <- counter + vals[i]
+      if (is.na(thresholds[4]) && counter >= 0.25){
+        thresholds[4] <- vals[i]}
+      if (is.na(thresholds[3]) && counter >= 0.50){
+        thresholds[3] <- vals[i]}
+      if (is.na(thresholds[2]) && counter >= 0.75){
+        thresholds[2] <- vals[i]}
+      if (is.na(thresholds[1]) && counter >= 0.90){
+        thresholds[1] <- vals[i]}
+      if (counter >= 0.90) {break}}
+    kud.map.disc <- classify(kud.map, rcl = matrix(c(-Inf, thresholds[1], NA,
+                                                     thresholds[4], Inf, 0.25,
+                                                     thresholds[3], Inf, 0.50,
+                                                     thresholds[2], Inf, 0.75,
+                                                     thresholds[1], Inf, 0.90), ncol=3, byrow=TRUE))
+    kud.off.map.disc <- classify(kud.off.map, rcl = matrix(c(-Inf, thresholds[1], NA,
+                                                             thresholds[4], Inf, 0.25,
+                                                             thresholds[3], Inf, 0.50,
+                                                             thresholds[2], Inf, 0.75,
+                                                             thresholds[1], Inf, 0.90), ncol=3, byrow=TRUE))
+   list(kud.map.disc = kud.map.disc,
+         kud.off.map.disc = kud.off.map.disc)
   })
   ###
   plotfunc <- eventReactive(input$update.map, {
