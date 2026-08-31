@@ -36,7 +36,7 @@ To visualize the degree of overlap between the selected tracking data and the Co
 - **Kernel density estimate (KDE):**
   - "Entire analysis area" includes offshore and terrestrial areas in and around the Cook Inlet, Alaska. For the exact delineation of the Cook Inlet analysis area, see "analysis area" under "spatial domains."
   - "Offshore area" includes the offshore areas in and around the Cook Inlet, Alaska. For the exact delineation of the Cook Inlet analysis area, see "analysis area" under "spatial domains."
-  - Note: KDE's are fitted for each individual (smoothing parameter: reference bandwidth) and then averaged across individuals. For the "offshore area" model, positive values occurring on land are set to 0 and remaining values are corrected to sum to 1.  
+  - Note: KDE's are fitted for each individual (smoothing parameter: reference bandwidth) and then averaged across individuals. For the "offshore area" model, positive values occurring on land are set to 0.  
 - **Spatial domains:**
   - Cook Inlet Planning Area: The Cook Inlet Planning Area as defined by the Bureau of Ocean Energy Management.
   - Lease Sale Area: The Lease Sale Area as defined by the Bureau of Ocean Energy Management.

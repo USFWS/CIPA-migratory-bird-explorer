@@ -91,7 +91,7 @@ ui <- page_navbar(
                                                         label = HTML("<b>Species:</b>"),
                                                         choices = names(list.tracks),
                                                         selected = character(0),
-                                                        multiple = TRUE, # allow multiple selections
+                                                        multiple = FALSE, # allow multiple selections
                                                         width = "100%",
                                                         option = pickerOptions(actionsBox = TRUE,
                                                                                selectedTextFormat = "count >1",
@@ -336,6 +336,9 @@ server <- function(input, output, session){
                         # Mapping continuous UD
                         kud.spdf <- estUDm2spixdf(kud)
                         kud.map <- rast(kud.spdf[(dim(kud.spdf@data)[2])]) # raster
+                        tot <- sum(kud.map[,,1],na.rm=T) # recalculate to sum to 1
+                        kud.map <- kud.map / tot
+                        #
                         off.mask <- rast(list.rst[["spdf.area.GCI.off"]]) # offshore mask
                         off.mask <- crop(off.mask,kud.map)
                         off.mask <- resample(off.mask, kud.map, method = "near")
@@ -344,10 +347,10 @@ server <- function(input, output, session){
                         kud.map <- project(kud.map,"EPSG:3857") # Reproject for leaflet
                         kud.off.map <- project(kud.off.map,"EPSG:3857") # Reproject for leaflet
                         #
-                        tot <- sum(kud.map[,,1],na.rm=T) # recalculate to sum to 1
-                        kud.map <- kud.map / tot
-                        tot <- sum(kud.off.map[,,1],na.rm=T) # recalculate to sum to 1
-                        kud.off.map <- kud.off.map / tot
+                        # tot <- sum(kud.map[,,1],na.rm=T) # recalculate to sum to 1
+                        # kud.map <- kud.map / tot
+                        # tot <- sum(kud.off.map[,,1],na.rm=T) # recalculate to sum to 1
+                        # kud.off.map <- kud.off.map / tot
                         ###
                         # Converting to discrete
                         thresholds <- rep(NA,4)
@@ -369,28 +372,12 @@ server <- function(input, output, session){
                                                                          thresholds[3], Inf, 0.50,
                                                                          thresholds[2], Inf, 0.75,
                                                                          thresholds[1], Inf, 0.90), ncol=3, byrow=TRUE))
-                        thresholds <- rep(NA,4)
-                        counter <- 0
-                        vals <- sort(as.numeric(values(kud.off.map)), decreasing = TRUE)
-                        for (i in 1:length(vals)){
-                          counter <- counter + vals[i]
-                          if (is.na(thresholds[4]) && counter >= 0.25){
-                            thresholds[4] <- vals[i]}
-                          if (is.na(thresholds[3]) && counter >= 0.50){
-                            thresholds[3] <- vals[i]}
-                          if (is.na(thresholds[2]) && counter >= 0.75){
-                            thresholds[2] <- vals[i]}
-                          if (is.na(thresholds[1]) && counter >= 0.90){
-                            thresholds[1] <- vals[i]}
-                          if (counter >= 0.90) {break}}
                         kud.off.map.disc <- classify(kud.off.map, rcl = matrix(c(-Inf, thresholds[1], NA,
                                                                                  thresholds[4], Inf, 0.25,
                                                                                  thresholds[3], Inf, 0.50,
                                                                                  thresholds[2], Inf, 0.75,
                                                                                  thresholds[1], Inf, 0.90), ncol=3, byrow=TRUE))
-                        list(kud.map = kud.map,
-                             kud.off.map = kud.off.map,
-                             kud.map.disc = kud.map.disc,
+                        list(kud.map.disc = kud.map.disc,
                              kud.off.map.disc = kud.off.map.disc)
   })
   ###
