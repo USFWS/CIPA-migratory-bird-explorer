@@ -59,13 +59,5 @@ output: html_document
 **Northern Fulmar**
 - Hatch, SA, Gill, VA, Mulcahy, DM, and Douglas, DC. (2020). Tracking data for Northern Fulmars (*Fulmarus glacialis*) (ver 1.0, October 2020): U.S. Geological Survey data release. https://doi.org/10.5066/P992BR5E
 
-**American Robin**
-- Boelman, N. Movebank study name: "ABoVE: Boelman Alberta American Robins". https://www.movebank.org/cms/webapp?gwt_fragment=page=studies,path=study136953438
-- Oliver, RY, Mahoney, PJ, Gurarie, E, Krikun, N, Weeks, BC, Hebblewhite, M, Liston, G, and Boelman, N. (2020). Behavioral responses to spring snow conditions contribute to long-term shift in migration phenology in American Robins. Environmental Research Letters. 15(4):045003. https://doi.org/10.1088/1748-9326/ab71a0
-
-**Rusty Blackbird**
-- Migratory Connectivity Project. Movebank study name: "MCP Rusty Blackbird Alberta, Alaska & New Hampshire". https://www.movebank.org/cms/webapp?gwt_fragment=page=studies,path=study613825248
-- Wright, JR, Johnson, JA, Bayne, E, Powell, LL, Foss, CR, Kennedy, JC, and Marra, PP. (2021). Migratory connectivity and annual cycle phenology of Rusty Blackbirds (*Euphagus carolinus*) revealed through archival GPS tags. Avian Conservation and Ecology 16(1):20. https://doi.org/10.5751/ACE-01871-160120
-
 **eBird Basic Dataset**
 - eBird Basic Dataset. Version: EBD_relJul-2026. Cornell Lab of Ornithology, Ithaca, New York. Jul 2026. https://science.ebird.org/en/use-ebird-data
