@@ -34,7 +34,7 @@ library(tidyr); library(terra); library(plotly); library(ggplot2); library(markd
 #
 
 files <- list.files("Processed data objects/fast.tracks") # vector of file names
-list.tracks <- setNames(vector("list", length(files)), # empty list of file names
+list_tracks <- setNames(vector("list", length(files)), # empty list of file names
                         c("Brant","Tundra Swan","King Eider", # reorder
                           "Black Scoter","Long-tailed Duck",
                           "Common Merganser","Hudsonian Whimbrel",
@@ -45,7 +45,7 @@ list.tracks <- setNames(vector("list", length(files)), # empty list of file name
                           "Iceland Gull","Red-throated Loon",
                           "Yellow-billed Loon","Northern Fulmar"))
 for (i in 1:length(files)){
-  list.tracks[[i]] <- read.fst(paste("Processed data objects/fast.tracks/",paste0("",files[i],""),sep=""))} # tracks: dataframe
+  list_tracks[[i]] <- read.fst(paste("Processed data objects/fast.tracks/",paste0("",files[i],""),sep=""))} # tracks: dataframe
 load("Processed data objects/list.shp.rda") # Spatial domains: shapefiles
 load("Processed data objects/list.rst.rda") # UD grid: rasters
 load("Processed data objects/list.track.plots.rda") # tracks: migratory timing: dataframe
@@ -88,9 +88,9 @@ ui <- page_navbar(
                                         column(4, class = "no-gutter", wellPanel( #gray border
                                           pickerInput(inputId = "Species",
                                                         label = HTML("<b>Species:</b>"),
-                                                        # choices = names(list.tracks),
+                                                        # choices = names(list_tracks),
                                                         # selected = character(0),
-                                                        choices = c("none selected", names(list.tracks)),
+                                                        choices = c("none selected", names(list_tracks)),
                                                         selected = "none selected",
                                                         multiple = FALSE, # allow multiple selections
                                                         width = "100%",
@@ -168,7 +168,7 @@ ui <- page_navbar(
                                           useShinyFeedback(),
                                           pickerInput(inputId = "Species.timing",
                                                       label = HTML("<b>Species:</b>"),
-                                                      choices = c("none selected", names(list.tracks)),
+                                                      choices = c("none selected", names(list_tracks)),
                                                       selected = "none selected",
                                                       multiple = FALSE, # allow multiple selections
                                                       width = "100%",
@@ -273,8 +273,8 @@ server <- function(input, output, session){
                 hideFeedback("Species")})
   observeEvent(c(input$Species,input$Month,input$individual.id,input$Year),{disable("UD")})
   ###
-  Sel_birds_1 <- reactive( ### subset list.tracks by species selection
-                          bind_rows(list.tracks[c(input$Species)])
+  Sel_birds_1 <- reactive( ### subset list_tracks by species selection
+                          bind_rows(list_tracks[c(input$Species)])
   )
   ###
   Tag_pal <- reactive( ### color palette for "Individuals" of "Species"
@@ -548,8 +548,8 @@ server <- function(input, output, session){
     if (input$Species.timing == "none selected"){disable("update.plots")}
     else {enable("update.plots")})
   ###
-  Sel_birds_time <- reactive( ### subset list.tracks by species selection
-                          bind_rows(list.tracks[c(input$Species.timing)]))
+  Sel_birds_time <- reactive( ### subset list_tracks by species selection
+                          bind_rows(list_tracks[c(input$Species.timing)]))
   Sel_birds_time_CI <- reactive( ### subset those in Great CIPA, using equal area projection
                               Sel_birds_time() %>%
                                 mutate(Loc.long.sf = location.long) %>%
