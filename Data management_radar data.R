@@ -4,23 +4,13 @@
 ##
 # Clear environment, load packages, set working directory
 rm(list=ls())
-z<-c("birdscanR","dplyr")
+z<-c("birdscanR","dplyr", "fst")
 lapply(z, library, character.only=TRUE)
 
 
 
 
 # Extracting Radar data --------------------------------------------------------------
-
-### identify where the scans reside and how many there are
-  ## sift through folders
-### March through November
-### Minimum 8 hours after evening civil twilight (sun >= 6 deg below horizon)
-### If no civil twilight, take last recorded civil twilight
-### If duration < 8 hours, extend for 8 hours
-### dates correspond to the date of sunset and proceed into the following day 
-### e.g., 2 Oct includes the sunset on 2 Oct through to sunrise on 3 Oct
-
 
 ### Create a df of sampling events (sampling events are in UTC time)
 df.events <- data.frame(Year.UTC = rep(1995:2025,each=275),
@@ -112,7 +102,6 @@ df.scans <- data.frame(Year.UTC = as.numeric(substr(file.paths[,1],10,13)),
 df.scans <- df.scans[df.scans$Month.UTC>2 &
                         df.scans$Month.UTC<12,] # subset march through november
 
-
 ### 
 ### Identify and tally nocturnal radar scans
 df.comp <- df.scans[1,]
@@ -148,7 +137,6 @@ sum(df.events.noct$Num.of.scans) == dim(df.scans.noct)[1]
 ###
 ### Extract and compile nocturnal and diurnal scan data
 noct.paths <- df.scans.noct[,c("Year.UTC","File.path")]
-# diur.paths <- df.scans[df.scans$Nocturnal==FALSE,][,c("Year.UTC","File.path")]
 #
 noct.yr <- unique(noct.paths$Year.UTC)
 for (i in 1:length(noct.yr)){
@@ -485,17 +473,6 @@ for (i in 1:length(noct.yr)){
         files = paths$File.path[31801:32278], # max at 32278
         exdir = "NEXRAD nocturnal scans")
 }
-####
-###
-###
-# diur.yr <- unique(diur.paths$Year.UTC)
-# for (i in 1:length(diur.yr)){
-#   paths <- diur.paths[diur.paths$Year.UTC==diur.yr[i],]$File.path
-#   untar(paste("NEXRAD profile data/profiles_",paste0("",diur.yr[i],".tar.bz2"),sep=""),
-#         files = paths,
-#         exdir = "NEXRAD diurnal scans")
-# }
-
 
 ####
 ###
@@ -523,21 +500,7 @@ df <- data.frame(bin_lower = 9,
                  Site = NA
                  )
 #
-# df.comp <- df #proofed: 1996-1999, 2013 ### STILL NEED TO DIVIDE BY 30 TO CONFIRM
-# for (i in 1:dim(noct.paths2)[1]){
-#   tryCatch({
-#     scn <- read.csv(paste("NEXRAD nocturnal scans/",paste0("",noct.paths2$File.path[i],""),sep=""))
-#     scn$Year.UTC <- as.numeric(substr(noct.paths2$File.path[i],10,13))
-#     scn$Month.UTC <- as.numeric(substr(noct.paths2$File.path[i],15,16))
-#     scn$Day.UTC <- as.numeric(substr(noct.paths2$File.path[i],18,19))
-#     scn$Scan.UTC <- as.numeric(substr(noct.paths2$File.path[i],39,44))
-#     scn$Site <- substr(noct.paths2$File.path[i],21,24)
-#     df.comp <- rbind(df.comp,scn)
-#   })
-# }
-# df.noct.data <- df.comp[-1,]
-# dim(unique(df.noct.data[c("Month.UTC", "Day.UTC", "Scan.UTC")]))[1]
-#
+
 noct.yr <- unique(noct.paths$Year.UTC)
 for (j in 1:length(noct.yr)){
   df.comp <- df
@@ -559,37 +522,6 @@ for (j in 1:length(noct.yr)){
 }
 
 
-# # df.scans that passed all of our filters
-# flt.scns <- df.noct.data[!duplicated(df.noct.data[,c("Year.UTC","Month.UTC","Day.UTC","Scan.UTC")]),]
-# df.noct.scans <- df.scans[paste(df.scans$Year.UTC, df.scans$Month.UTC, df.scans$Day.UTC, df.scans$Scan.UTC) %in%
-#                             paste(flt.scns$Year.UTC, flt.scns$Month.UTC, flt.scns$Day.UTC, flt.scns$Scan.UTC),]
-# write.csv(df.noct.scans,file="Nocturnal_radar_scans.csv")
-# # the number of scans (that passed our filters) per nocturnal "event"
-# flt.events <- df.noct.scans[!duplicated(df.noct.scans[,c("Year.UTC","Month.UTC","Day.UTC")]),]
-# df.noct.events <- df.events[paste(df.events$Year.UTC, df.events$Month.UTC, df.events$Day.UTC) %in%
-#                               paste(flt.events$Year.UTC, flt.events$Month.UTC, flt.events$Day.UTC),]
-# for (i in 1:dim(df.noct.events)[1]){
-#   sub <- df.noct.scans[paste(df.noct.scans$Year.UTC, df.noct.scans$Month.UTC, df.noct.scans$Day.UTC) %in%
-#                          paste(df.noct.events$Year.UTC[i], df.noct.events$Month.UTC[i], df.noct.events$Day.UTC[i]),]
-#   df.noct.events$Num.of.scans[i] <- dim(sub)[1]
-# }
-# write.csv(df.noct.events,file="Nocturnal_radar_events.csv")
-#
-# df.comp <- df
-# for (i in 1:dim(diur.paths)[1]){
-#   scn <- read.csv(paste("NEXRAD diurnal scans/",paste0("",diur.paths$File.path[i],""),sep=""))
-#   if (dim(scn)[1]==30){
-#     scn$Year.UTC <- as.numeric(substr(diur.paths$File.path[i],10,13))
-#     scn$Month.UTC <- as.numeric(substr(diur.paths$File.path[i],15,16))
-#     scn$Day.UTC <- as.numeric(substr(diur.paths$File.path[i],18,19))
-#     scn$Scan.UTC <- as.numeric(substr(diur.paths$File.path[i],39,44))
-#     scn$Site <- substr(diur.paths$File.path[i],21,24)
-#     df.comp <- rbind(df.comp,scn)}
-# }
-# df.diur.data <- df.comp[-1,]
-# write.csv(df.diur.data,file="Diurnal_radar_data.csv")
-
-
 # END: Extracting Radar data ---------------------------------------------------------
 
 
@@ -608,9 +540,9 @@ df <- data.frame(Ordinal.date = rep(NA,31),
                  Direction = NA)
 df.z <- df[1,]
 #
-yr.files <- list.files("NEXRAD nocturnal scans/scans by year") # vector of archive names
+yr.files <- list.files("Raw NEXRAD nocturnal scans/scans by year") # vector of archive names
 for (i in 1:length(yr.files)){ # loop through year-specific scan data
-  scns <- read.csv(paste("NEXRAD nocturnal scans/scans by year/",paste0("",yr.files[i],""),sep=""))
+  scns <- read.csv(paste("Raw NEXRAD nocturnal scans/scans by year/",paste0("",yr.files[i],""),sep=""))
   scns$Date <- as.Date(paste(scns$Year.UTC, scns$Month.UTC, scns$Day.UTC, sep = "-")) 
   scns$Ordinal.date <- format(as.Date(scns$Date), "%j")
   scns$Scan.ID <- paste(scns$Ordinal.date,scns$Scan.UTC,sep="_")
@@ -647,17 +579,12 @@ for (i in 1:length(yr.files)){ # loop through year-specific scan data
 #
 df.noct.data.all <- df.z[-1,]
 #
-# write.csv(df.noct.data.all, file="Nocturnal_radar_data_all.csv")
+# write.fst(df.noct.data.all,"Processed data objects/Nocturnal_radar_data_all.fst")
 
-table(df.noct.data.all$Ordinal.date)
 
 # END: Processing Radar data ---------------------------------------------------
 
 
-
-### MODIFY METHODS
-## END OF CIVIL TWILIGHT TO ONSET OF CIVIL TWILIGHT (SUN ANGLE < -6), NOT SUNSET TO SUNRISE (SUN ANGLE < 0(?))
-## REFLECTIVITY, NOT REFLECTIVITY TRAFFIC RATE
 
 
 
